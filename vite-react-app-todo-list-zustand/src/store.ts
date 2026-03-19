@@ -9,9 +9,10 @@ type todoStoreType = {
     list : listitem[],
     addItem : (desc: string) => void,
     deleteItem : (timestamp : number) => void
+    addItemAsync: (desc: string) => Promise<void>
 }
 
-const useTodoStore = create<todoStoreType>((set) => ({
+const useTodoStore = create<todoStoreType>((set,get) => ({
     list: [],
     addItem : (desc)=> {
         set((state)=>({
@@ -25,7 +26,11 @@ const useTodoStore = create<todoStoreType>((set) => ({
         set((state)=>({
             list : state.list.filter((item)=>item.timestamp!=timestamp)
         }))
-    }
+    },
+    addItemAsync: async (desc) => {
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        get().addItem(desc)
+    },
 }));
 
 
